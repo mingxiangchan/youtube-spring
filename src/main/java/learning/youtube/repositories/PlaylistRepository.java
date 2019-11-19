@@ -26,5 +26,42 @@ public class PlaylistRepository {
         RowMapper<Playlist> rowMapper = new PlaylistRowMapper();
         return this.jdbcTemplate.query(sql, rowMapper);
     } 
+
+    public Playlist getOne(int playlistId){
+        String sql = "SELECT * FROM playlists WHERE id = ?";
+        RowMapper<Playlist> rowMapper = new PlaylistRowMapper();
+        return jdbcTemplate.queryForObject(sql, rowMapper, playlistId);
+    }
+
+    public void addPlaylist(Playlist playlist){
+        String sql = "INSERT INTO playlists (title) VALUES (?)";
+
+        jdbcTemplate.update(sql, playlist.getTitle());
+
+        String sql2 = "SELECT id FROM playlists WHERE title = ?";
+        int playlistId = jdbcTemplate.queryForObject(sql2, Integer.class, playlist.getTitle());
+
+        playlist.setId(playlistId);
+    }
+
+    public void updatePlaylist(Playlist playlist){
+        String sql = "UPDATE playlists SET title = ? WHERE id = ?";
+        jdbcTemplate.update(sql, playlist.getTitle(), playlist.getId());
+    }
+
+    public void deletePlaylist(int playlistId){
+        String sql = "DELETE FROM playlists WHERE id = ?";
+        jdbcTemplate.update(sql, playlistId);
+    }
+
+    public boolean playlistExists(int playlistId) {
+        String sql = "SELECT count(*) FROM playlists WHERE id =?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, playlistId);
+        if(count == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     
 }
