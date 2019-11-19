@@ -5,6 +5,12 @@ public class Uploader {
     private String name;
     private String email;
 
+    // this is good
+    // private int numUpvotes;
+
+    // this is bad
+    // private int num_upvotes
+
     public int getId() {
         return this.id;
     }
