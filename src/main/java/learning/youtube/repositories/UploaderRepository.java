@@ -33,6 +33,11 @@ public class UploaderRepository {
         return jdbcTemplate.queryForObject(sql, rowMapper, uploaderId);
     }
 
+    public int getOneByEmail(String email){
+        String sql = "SELECT COUNT(*) FROM playlists WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, email);
+    }
+
     public void addUploader(Uploader uploader){
         String sql = "INSERT INTO uploaders (name, email) VALUES (?, ?)";
 

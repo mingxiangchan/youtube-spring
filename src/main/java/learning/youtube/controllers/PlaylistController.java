@@ -10,14 +10,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import learning.youtube.formats.CreatePlaylistRequest;
 import learning.youtube.models.Playlist;
 import learning.youtube.repositories.PlaylistRepository;
+import learning.youtube.services.CreatePlaylistService;
+import learning.youtube.services.CreatePlaylistWithVideoService;
 
 @RestController
 public class PlaylistController {
 
     @Autowired
     PlaylistRepository repo;
+
+    @Autowired
+    CreatePlaylistService createPlaylistService;
+
+    @Autowired
+    CreatePlaylistWithVideoService createPlaylistWithVideoService;
 
     @GetMapping(value = "/playlists")
     public List<Playlist> index() {
@@ -26,9 +35,12 @@ public class PlaylistController {
 
     @PostMapping(value = "/playlists")
     public Playlist create(@RequestBody Playlist playlist){
-        repo.addPlaylist(playlist);
+        return createPlaylistService.run(playlist);
+    }
 
-        return playlist;
+    @PostMapping(value = "/playlists/with_videos")
+    public Playlist createWithVideos(@RequestBody CreatePlaylistRequest data) {
+        return createPlaylistWithVideoService.run(data);
     }
 
     @GetMapping(value = "/playlists/{id}")

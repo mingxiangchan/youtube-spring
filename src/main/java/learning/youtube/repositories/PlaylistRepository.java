@@ -33,6 +33,11 @@ public class PlaylistRepository {
         return jdbcTemplate.queryForObject(sql, rowMapper, playlistId);
     }
 
+    public int getOneByTitle(String title){
+        String sql = "SELECT COUNT(*) FROM playlists WHERE title = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, title);
+    }
+
     public void addPlaylist(Playlist playlist){
         String sql = "INSERT INTO playlists (title) VALUES (?)";
 

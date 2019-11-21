@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import learning.youtube.models.Uploader;
 import learning.youtube.repositories.UploaderRepository;
+import learning.youtube.services.CreateUploaderService;
 
 @RestController
 public class UploaderController {
 
     @Autowired
     UploaderRepository repo;
+
+    @Autowired
+    CreateUploaderService createUploaderService;
 
     @GetMapping(value = "/uploaders")
     public List<Uploader> index() {
@@ -27,8 +31,7 @@ public class UploaderController {
 
     @PostMapping(value = "/uploaders")
     public Uploader create(@RequestBody Uploader uploader){
-        repo.addUploader(uploader);
-        return uploader;
+        return createUploaderService.run(uploader);
     }    
     
     @GetMapping(value = "/uploaders/{id}")
