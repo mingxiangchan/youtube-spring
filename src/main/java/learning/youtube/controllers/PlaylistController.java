@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import learning.youtube.formats.CreatePlaylistRequest;
 import learning.youtube.models.Playlist;
 import learning.youtube.repositories.PlaylistRepository;
-import learning.youtube.services.CreatePlaylistService;
-import learning.youtube.services.CreatePlaylistWithVideoService;
 
 @RestController
 public class PlaylistController {
@@ -22,45 +20,48 @@ public class PlaylistController {
     @Autowired
     PlaylistRepository repo;
 
-    @Autowired
-    CreatePlaylistService createPlaylistService;
+    // @Autowired
+    // CreatePlaylistService createPlaylistService;
 
-    @Autowired
-    CreatePlaylistWithVideoService createPlaylistWithVideoService;
+    // @Autowired
+    // CreatePlaylistWithVideoService createPlaylistWithVideoService;
 
     @GetMapping(value = "/playlists")
     public List<Playlist> index() {
-        return repo.getAll();
+        return repo.findAll();
     }
 
-    @PostMapping(value = "/playlists")
-    public Playlist create(@RequestBody Playlist playlist){
-        return createPlaylistService.run(playlist);
-    }
+    // @PostMapping(value = "/playlists")
+    // public Playlist create(@RequestBody Playlist playlist){
+    //     return createPlaylistService.run(playlist);
+    // }
 
-    @PostMapping(value = "/playlists/with_videos")
-    public Playlist createWithVideos(@RequestBody CreatePlaylistRequest data) {
-        return createPlaylistWithVideoService.run(data);
-    }
+    // @PostMapping(value = "/playlists/with_videos")
+    // public Playlist createWithVideos(@RequestBody CreatePlaylistRequest data) {
+    //     return createPlaylistWithVideoService.run(data);
+    // }
 
     @GetMapping(value = "/playlists/{id}")
-    public Playlist show(@PathVariable("id") int id){
-        return repo.getOne(id);
+    public Playlist show(@PathVariable("id") Long id){
+        return repo.findById(id).orElse(null);
     }
 
     @PostMapping(value = "/playlists/{id}")
-    public void update(@PathVariable("id") int id, @RequestBody Playlist playlist){
-        playlist.setId(id);
-        repo.updatePlaylist(playlist);
-    }
+    public void update(@PathVariable("id") Long id, @RequestBody Playlist data){
+        Playlist x = repo.findById(id).orElse(null);
 
-    @DeleteMapping(value = "/playlists/{id}")
-    public String update(@PathVariable("id") int id){
-        if(repo.playlistExists(id)){
-            repo.deletePlaylist(id);
-            return "Sucessfully deleted playlist";
-        } else {
-            return "Playlist could not be found";
+        if (x != null) {
+            x.setTitle(data.getTitle());
         }
     }
+
+    // @DeleteMapping(value = "/playlists/{id}")
+    // public String update(@PathVariable("id") int id){
+    //     if(repo.playlistExists(id)){
+    //         repo.deletePlaylist(id);
+    //         return "Sucessfully deleted playlist";
+    //     } else {
+    //         return "Playlist could not be found";
+    //     }
+    // }
 }

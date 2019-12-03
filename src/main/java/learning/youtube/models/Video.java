@@ -1,19 +1,41 @@
 package learning.youtube.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Entity
+@Table(name = "videos")
 public class Video {
-    private int id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private int length;
-    private int numUpvotes;
-    private int numDownvotes;
-    private int playlistId;
-    private int uploaderId;
 
-    public int getId() {
+    @Column(name = "num_upvotes")
+    private int numUpvotes;
+
+    @Column(name = "num_downvotes")
+    private int numDownvotes;
+
+    @JsonIgnoreProperties("videos")
+    @ManyToOne
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
+
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,20 +71,13 @@ public class Video {
         this.numDownvotes = numDownvotes;
     }
 
-    public int getPlaylistId() {
-        return this.playlistId;
+    public Playlist getPlaylist() {
+        return this.playlist;
     }
 
-    public void setPlaylistId(int playlistId) {
-        this.playlistId = playlistId;
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
     }
 
-    public int getUploaderId() {
-        return this.uploaderId;
-    }
-
-    public void setUploaderId(int uploaderId) {
-        this.uploaderId = uploaderId;
-    }
 
 }
